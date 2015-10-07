@@ -30,7 +30,11 @@ module.exports = function(grunt) {
             }
         },
 
-        clean: ['<%= paths.dist.base %>/*', '!<%= paths.dist.base %>/.git'],
+        clean: {
+            dev: ['<%= paths.app.resources %>/css/main.css', '<%= paths.app.resources %>/css/main.css.map'],
+            dist: ['<%= paths.dist.base %>/*', '!<%= paths.dist.base %>/.git']
+
+        },
 
         copy: {
             dist: {
@@ -76,7 +80,7 @@ module.exports = function(grunt) {
         watch: {
             sass: {
                 files: ['<%= paths.app.resources %>/css/**/*.scss'],
-                tasks: ['sass:dev']
+                tasks: ['clean:dev', 'sass:dev']
             }
         }
     });
