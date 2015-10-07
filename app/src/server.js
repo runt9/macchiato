@@ -1,7 +1,7 @@
 require('app-module-path').addPath(__dirname);
-var app = require('index');
-var config = require('config');
-var logger = require('logger');
+var app = require('index'),
+    config = require('config'),
+    logger = require('logger');
 
 // Server init
 app.listen(config.express.port, config.express.ip, function(error) {

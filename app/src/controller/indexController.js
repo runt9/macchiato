@@ -1,5 +1,5 @@
-var router = require('express').Router();
-var logger = require('logger');
+var router = require('express').Router(),
+    logger = require('logger');
 
 router.get('/', function(req, res) {
     logger.debug('index');

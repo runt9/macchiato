@@ -1,5 +1,5 @@
-var router = require('express').Router();
-var logger = require('logger');
+var router = require('express').Router(),
+    logger = require('logger');
 
 router.use(function(req, res, next) {
     logger.error('Failed to load page [%s]', req.url);
