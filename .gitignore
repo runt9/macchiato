@@ -30,8 +30,4 @@ node_modules
 *.iml
 .idea
 
-# Build output
-app/resources/css/main.css
-app/resources/css/main.css.map
-
 dist/*
