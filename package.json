@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "app-module-path": "~1.0.4",
+    "body-parser": "^1.14.1",
     "crypto": "0.0.3",
     "express": "~4.13.3",
     "jade": "~1.11.0",
