@@ -1,13 +1,13 @@
 var moment = require('moment');
 var util = require('util');
 var config = require('config');
-var lodash = require('lodash');
+var _ = require('lodash');
 
 var logger = {
     debugLog: config.logging.debug,
 
     formatMsg: function (msg) {
-        msg = lodash.values(msg);
+        msg = _.values(msg);
         return util.format.apply(null, msg);
     },
 

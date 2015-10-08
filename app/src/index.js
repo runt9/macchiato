@@ -1,6 +1,6 @@
 var express = require('express');
-var config = require('config');
 var logger = require('logger');
+var bodyParser = require('body-parser');
 var app = express();
 
 // Initial config
@@ -11,6 +11,7 @@ app.set('views', __dirname + '/view');
 // Middleware setup
 logger.debug('Setting up middleware');
 app.use(express.static('resources'));
+app.use(bodyParser.json());
 
 // Router imports
 logger.debug('Loading routers');
