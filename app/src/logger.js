@@ -11,8 +11,8 @@ var logger = {
         return util.format.apply(null, msg);
     },
 
-    log: function (severity, args) {
-        var msg = this.formatMsg(args[1]);
+    log: function (severity) {
+        var msg = this.formatMsg(arguments[1]);
         console.log('[ %s | %s ]: %s',
             moment().format('YYYY-MM-DD HH:mm:ss.SSS'), severity, msg);
     },
