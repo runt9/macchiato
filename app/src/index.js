@@ -16,7 +16,6 @@ app.use(bodyParser.json());
 // Router imports
 logger.debug('Loading routers');
 app.use(require('controller/indexController'));
-app.use(require('controller/meetingController'));
 
 // Error handler import
 app.use(require('controller/errorController'));
