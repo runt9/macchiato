@@ -46,55 +46,44 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            files: ['<%= paths.app.resources %>/js/**/*.js'],
+            files: ['<%= paths.app.src %>/**/*.js', '<%= paths.app.resources %>/js/**/*.js'],
             options: {
                 globals: {
-                    jQuery: true
+                    jQuery: true,
+                    node: true
                 }
             }
         },
 
-        sass: {
+        concat: {
             dist: {
-                options: {
-                    style: 'expanded',
-                    compass: false,
-                    loadPath: '<%= paths.app.base %>'
-                },
-                files: {
-                    '<%= paths.dist.css %>/<%= pkg.name %>.css': ['<%= paths.app.resources %>/css/main.scss']
-                }
+                src: ['<%= paths.app.resources %>/css/**/*.css'],
+                dest: '<%= paths.dist.css %>/<%= pkg.name %>.css'
             },
             dev: {
-                options: {
-                    style: 'expanded',
-                    compass: false,
-                    loadPath: '<%= paths.app.base %>'
-                },
-                files: {
-                    '<%= paths.app.resources %>/css/main.css': ['<%= paths.app.resources %>/css/main.scss']
-                }
+                src: ['<%= paths.app.resources %>/css/**/*.css'],
+                dest: '<%= paths.app.resources %>/css/<%= pkg.name %>.css'
             }
         },
 
         watch: {
-            sass: {
-                files: ['<%= paths.app.resources %>/css/**/*.scss'],
-                tasks: ['clean:dev', 'sass:dev']
+            css: {
+                files: ['<%= paths.app.resources %>/css/**/*.css'],
+                tasks: ['clean:dev', 'concat:dev']
             }
         }
     });
 
     grunt.registerTask('build-dev', [
         'clean',
-        'sass:dev',
-        'watch:sass'
+        'concat:dev',
+        'watch:css'
     ]);
 
     grunt.registerTask('build', [
         'clean',
-        'copy',
         'jshint',
-        'sass:dist'
+        'concat:dist',
+        'copy'
     ]);
 };

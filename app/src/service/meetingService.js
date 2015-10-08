@@ -1,12 +1,12 @@
-var logger = require('logger'),
-    db = require('db');
+var logger = require('logger');
+var db = require('db');
 
 var meetingService = {
     /**
      * Creates a new meeting by generating an admin GUID and passing that to the DB handler.
      * @returns {string}
      */
-    createMeeting: function() {
+    createMeeting: function () {
         var adminGuid = db.generateGuid('admin');
         return db.createMeeting(adminGuid);
     },
@@ -16,10 +16,12 @@ var meetingService = {
      * @param meetingId
      * @returns {Object}
      */
-    getMeeting: function(meetingId) {
+    getMeeting: function (meetingId) {
+        var meeting;
+
         try {
-            var meeting = db.getMeeting(meetingId);
-        } catch(e) {
+            meeting = db.getMeeting(meetingId);
+        } catch (e) {
             logger.error('Failed to load meeting by meeting id [%s]', meetingId);
             return null;
         }

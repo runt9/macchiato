@@ -3,9 +3,9 @@
  * handlers and helpers to pick at and update the data. We will move to a real database soon, but right now,
  * losing history on server restart is not a problem since we're building an alpha version.
  */
-var logger = require('logger'),
-    moment = require('moment'),
-    crypto = require('crypto');
+var logger = require('logger');
+var moment = require('moment');
+var crypto = require('crypto');
 
 var db = {
     data: {},
@@ -17,7 +17,7 @@ var db = {
      * @param str
      * @returns {string}
      */
-    generateGuid: function(str) {
+    generateGuid: function (str) {
         return crypto.createHash('sha1').update(str + moment().format('x')).digest('hex').substr(1, 10);
     },
 
@@ -26,7 +26,7 @@ var db = {
      * @param adminGuid
      * @returns {string}
      */
-    createMeeting: function(adminGuid) {
+    createMeeting: function (adminGuid) {
         var meetingGuid = this.generateGuid('meeting');
         this.data[meetingGuid] = {
             admin: adminGuid,
@@ -43,9 +43,9 @@ var db = {
      * @param meetingId
      * @returns {Object}
      */
-    getMeeting: function(meetingId) {
+    getMeeting: function (meetingId) {
         if (!this.data.hasOwnProperty(meetingId)) {
-            throw new Error('Unable to load meeting by meeting id ' + meetingId)
+            throw new Error('Unable to load meeting by meeting id ' + meetingId);
         }
 
         return this.data[meetingId];

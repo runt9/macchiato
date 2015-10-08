@@ -1,7 +1,7 @@
-var express = require('express'),
-    config = require('config'),
-    logger = require('logger'),
-    app = express();
+var express = require('express');
+var config = require('config');
+var logger = require('logger');
+var app = express();
 
 // Initial config
 logger.debug('Configuring');

@@ -1,10 +1,10 @@
 require('app-module-path').addPath(__dirname);
-var app = require('index'),
-    config = require('config'),
-    logger = require('logger');
+var app = require('index');
+var config = require('config');
+var logger = require('logger');
 
 // Server init
-app.listen(config.express.port, config.express.ip, function(error) {
+app.listen(config.express.port, config.express.ip, function (error) {
     if (error) {
         logger.error(error);
         process.exit(1);
