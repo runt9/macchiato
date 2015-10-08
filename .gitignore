@@ -30,4 +30,6 @@ node_modules
 *.iml
 .idea
 
+# Build assets
+app/resources/css/macchiato.css
 dist/*

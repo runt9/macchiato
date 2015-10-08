@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "express": {
+      "port": 8585,
+      "ip": "127.0.0.1"
+    },
+
+    "logging": {
+      "debug": true
+    }
+  },
+
+  "prod": {
+    "express": {
+      "port": 8585,
+      "ip": "127.0.0.1"
+    },
+
+    "logging": {
+      "debug": false
+    }
+  }
+}

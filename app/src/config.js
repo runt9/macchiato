@@ -1,12 +1,18 @@
-var config = {
-    express: {
-        port: 8585,
-        ip: "127.0.0.1"
-    },
+var nconf = require('nconf');
+var path = require('path');
 
-    logging: {
-        debug: true
+function getEnvironment() {
+    if (process.env.NODE_ENV) {
+        return process.env.NODE_ENV;
     }
-};
+
+    return 'dev';
+}
+
+nconf.argv().env().file({
+    file: path.join(__dirname, '../../config.json')
+});
+
+config = nconf.get(getEnvironment());
 
 module.exports = config;
