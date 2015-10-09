@@ -11,6 +11,10 @@ body {color: navy;
 .main-box {border: solid thin navy;
         text-align: center;
         font-size: 1.1em;}
+        
+.topic-box {border: solid thin navy;
+        text-align: left;
+        font-size: 1.0em;}
 
 .settings {border: solid thin navy;
         text-align: center;

@@ -1,48 +1,17 @@
 html
     head
-        title 'Settings'
+        title 'Current Topic'
         style
             include create.css
     body
         
         div.settings
-            div.msg Create Lean Coffee Meeting
+            div.msg Current Topic
             
-            p Meeting Name: 
-                input(type="text", size="30", placeholder="enter a meeting name")
-
-            p Your Name: 
-                input(type="text", size="30", placeholder="enter your name")
-            
-            p Meeting Length:
-                select(name='length')
-                    option(value='30', selected='selected') 30
-                    option(value='20') 20
-                    option(value='15') 15
-                    option(value='10') 10
-
-            p Time per Topic:
-                select(name='time')
-                    option(value='4', selected='selected') 4
-                    option(value='3') 3
-                    option(value='2') 2
-                    option(value='1') 1
-            
-            p Time per Topic After Vote:
-                select(name='after')
-                    option(value='2', selected='selected') 2
-                    option(value='3') 3
-                    option(value='2') 2
-                    option(value='4') 4
-
-            p Votes per Person:
-                select(name='votes')
-                    option(value='3', selected='selected') 3
-                    option(value='2') 2
-                    option(value='1') 1       
-                    
+                p.topic-box  Vivamus a orci vel arcu posuere faucibus. Morbi quis fermentum metus. Nam imperdiet sagittis nulla. Donec eu pulvinar nisi. Aliquam egestas, diam eget convallis mattis, tellus libero dapibus sem
+                                    
             p
-                input(type="submit", value="Cancel", class="cancel")
+                input(type="submit", value="Stop", class="cancel")
                      
                 input(type="submit", value="Go", class="go")
             div.msg 

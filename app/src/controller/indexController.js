@@ -16,4 +16,8 @@ router.get('/settings', function (req, res) {
     res.status(200).render('settings', {settings: {msg: 'Hello World!'}});
 });
 
+router.get('/current', function (req, res) {
+    logger.debug('index [%s]', req.url);
+    res.status(200).render('current', {current: {msg: 'Hello World!'}});
+});
 module.exports = router;
