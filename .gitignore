@@ -31,5 +31,6 @@ node_modules
 .idea
 
 # Build assets
-app/resources/css/macchiato.css
+app/resources/macchiato.css
+app/resources/macchiato.js
 dist/*

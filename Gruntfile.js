@@ -31,9 +31,8 @@ module.exports = function(grunt) {
         },
 
         clean: {
-            dev: ['<%= paths.app.resources %>/css/main.css', '<%= paths.app.resources %>/css/main.css.map'],
+            dev: ['<%= paths.app.resources %>/<%= pkg.name %>.css', '<%= paths.app.resources %>/<%= pkg.name %>.js'],
             dist: ['<%= paths.dist.base %>/*', '!<%= paths.dist.base %>/.git']
-
         },
 
         copy: {
@@ -46,7 +45,8 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            files: ['<%= paths.app.src %>/**/*.js', '<%= paths.app.resources %>/js/**/*.js'],
+            dev: ['<%= paths.app.src %>/**/*.js', '<%= paths.app.resources %>/<%= pkg.name %>.js'],
+            dist: ['<%= paths.dist.base %>/**/*.js'],
             options: {
                 jshintrc: '.jshintrc',
                 globals: {
@@ -57,34 +57,38 @@ module.exports = function(grunt) {
         },
 
         concat: {
-            dist: {
-                src: ['<%= paths.app.resources %>/css/**/*.css'],
-                dest: '<%= paths.dist.css %>/<%= pkg.name %>.css'
-            },
             dev: {
-                src: ['<%= paths.app.resources %>/css/**/*.css'],
-                dest: '<%= paths.app.resources %>/css/<%= pkg.name %>.css'
+                files: {
+                    '<%= paths.app.resources %>/<%= pkg.name %>.css': ['<%= paths.app.resources %>/css/**/*.css'],
+                    '<%= paths.app.resources %>/<%= pkg.name %>.js': ['<%= paths.app.resources %>/js/**/*.js']
+                }
+            },
+
+            dist: {
+                files: {
+                    '<%= paths.dist.css %>/<%= pkg.name %>.css': ['<%= paths.app.resources %>/css/**/*.css'],
+                    '<%= paths.dist.js %>/<%= pkg.name %>.js': ['<%= paths.app.resources %>/js/**/*.js']
+                }
             }
         },
 
         watch: {
-            css: {
-                files: ['<%= paths.app.resources %>/css/**/*.css'],
-                tasks: ['clean:dev', 'concat:dev']
-            }
+            files: ['<%= paths.app.resources %>/css/**/*.css', '<%= paths.app.resources %>/js/**/*.js'],
+            tasks: ['clean:dev', 'concat:dev']
         }
     });
 
     grunt.registerTask('build-dev', [
-        'clean',
+        'clean:dev',
         'concat:dev',
-        'watch:css'
+        'jshint:dev',
+        'watch'
     ]);
 
     grunt.registerTask('build', [
         'clean',
-        'jshint',
         'concat:dist',
+        'jshint:dist',
         'copy'
     ]);
 };

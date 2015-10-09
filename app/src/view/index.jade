@@ -1,6 +1,5 @@
-html
-   head
-      title Macchiato
-      script(src="/socket.io/socket.io.js")
-      script(type="text/javascript").
-          var socket = io();
+include header.jade
+body(ng-controller="IndexController")
+
+script(type="text/ng-template" id="newMeetingModal.html")
+    include newMeetingModal.jade
