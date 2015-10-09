@@ -13,6 +13,6 @@ nconf.argv().env().file({
     file: path.join(__dirname, '../../config.json')
 });
 
-config = nconf.get(getEnvironment());
+var config = nconf.get(getEnvironment());
 
 module.exports = config;
