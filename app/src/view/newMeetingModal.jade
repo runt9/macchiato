@@ -2,7 +2,7 @@
     h4.modal-header Create Lean Coffee Meeting
     .modal-body
         div(ng-show="!loading")
-            #newMeetingModalError.alert.alert-danger(ng-show="error") {{error}}
+            .alert.alert-danger(ng-show="error") {{error}}
             div(ng-show="loading") Loading...
             table.table.settings
                 tbody

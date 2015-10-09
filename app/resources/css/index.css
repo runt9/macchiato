@@ -17,11 +17,6 @@ body {
     font-size: 1.1em;
 }
 
-.topic-box {
-    text-align: left;
-    font-size: 1.0em;
-}
-
 .settings {
     text-align: center;
     font-size: 1.1em;
@@ -40,4 +35,49 @@ body {
     padding-right: 10%;
     margin-bottom: 20px;
     font-size: 1.1em;
+}
+
+.topic {
+    position: relative;
+    border: 1px solid #CCCCCC;
+    margin: 6px;
+    height: 75px;
+    background-color: #FEFEFE;
+    box-shadow: 1px 1px 3px #000000;
+}
+
+.topicText {
+    display: table-cell;
+    height: 75px;
+    width: 280px;
+    padding-left: 20px;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+.topicVotes {
+    position: absolute;
+    right: 7px;
+    bottom: -10px;
+    font-size: 0.8em;
+}
+
+.topic .vote {
+    cursor: pointer;
+    position: absolute;
+    left: 10px;
+    font-size: 1.4em;
+}
+
+.topic .vote:hover {
+    color: #00b3ee;
+}
+
+.topic .addVote {
+    top: 7px;
+}
+
+.topic .removeVote {
+    bottom: 7px;
+    top: auto;
 }

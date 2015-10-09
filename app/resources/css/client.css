@@ -1,0 +1,25 @@
+.addTopics {
+    margin: 0 auto;
+    width: 40%;
+}
+
+.topicInput {
+    margin: 0 auto 10px;
+    width: auto;
+}
+
+.charactersRemaining {
+    padding-bottom: 10px;
+    font-size: 0.8em;
+    color: #AAAAAA;
+}
+
+.newTopicReset {
+    margin-right: 20px;
+}
+
+.topicsToDiscuss {
+    width: 300px;
+    margin: 0 auto;
+    border: 1px solid navy;
+}

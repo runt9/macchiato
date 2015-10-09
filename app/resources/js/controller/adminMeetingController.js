@@ -36,34 +36,36 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
     });
 
     $socket.on('meetingStatusUpdated', function(status) {
-        $scope.meeting.status = status;
+        $scope.$apply(function() {
+            $scope.meeting.status = status;
 
-        if (status === $scope.MEETING_STATUS_DISCUSSING) {
-            var topic = lodash.find($scope.meeting.topics, function(t) {
-                return t.status === $scope.TOPIC_STATUS_DISCUSSING;
-            });
+            if (status === $scope.MEETING_STATUS_DISCUSSING) {
+                var topic = lodash.find($scope.meeting.topics, function (t) {
+                    return t.status === $scope.TOPIC_STATUS_DISCUSSING;
+                });
 
-            if (topic === undefined) {
-                // Our meeting is about to be done, so just wait for the next event to come in and handle that.
-                return;
-            }
+                if (topic === undefined) {
+                    // Our meeting is about to be done, so just wait for the next event to come in and handle that.
+                    return;
+                }
 
-            // Don't have a current topic yet, so set it.
-            if ($scope.currentTopic === null) {
-                $scope.currentTopic = topic;
-                $scope.timer.time = $scope.meeting.settings['timePerTopic'];
-            } else {
-                // We're re-discussing the current topic. Set the timer to the time after voting time and go.
-                if ($scope.currentTopic.id === topic.id) {
-                    $scope.timer.time = $scope.meeting.settings['timePerTopicAfterVoting'];
-                } else {
+                // Don't have a current topic yet, so set it.
+                if ($scope.currentTopic === null) {
                     $scope.currentTopic = topic;
                     $scope.timer.time = $scope.meeting.settings['timePerTopic'];
+                } else {
+                    // We're re-discussing the current topic. Set the timer to the time after voting time and go.
+                    if ($scope.currentTopic.id === topic.id) {
+                        $scope.timer.time = $scope.meeting.settings['timePerTopicAfterVoting'];
+                    } else {
+                        $scope.currentTopic = topic;
+                        $scope.timer.time = $scope.meeting.settings['timePerTopic'];
+                    }
                 }
-            }
 
-            $scope.timer.playing = true;
-        }
+                $scope.timer.playing = true;
+            }
+        });
     });
 
     $scope.timer = {

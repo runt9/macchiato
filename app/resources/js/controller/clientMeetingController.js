@@ -3,6 +3,7 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
     $scope.newTopicText = '';
     $scope.currentTopic = {};
     $scope.discussingVoted = false;
+    $scope.votesUsed = 0;
 
     // Run our init function once the parent scope has finished loading the meeting data
     $scope.waitForLoadedInterval = $interval(function() {
@@ -49,6 +50,18 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
     };
 
     $scope.addTopic = function() {
+        if ($scope.newTopicText.length > 100) {
+            $scope.$parent.error = 'Please keep topics under 100 characters!';
+            return;
+        }
+
+        if ($scope.newTopicText.length === 0) {
+            $scope.$parent.error = 'Please enter a topic!';
+            return;
+        }
+
+        $scope.$parent.error = '';
+
         $socket.emit('addTopic', {text: $scope.newTopicText});
         $scope.newTopicText = '';
     };
@@ -58,10 +71,20 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
     };
     
     $scope.topicAddVote = function(topicId) {
+        if ($scope.meeting.settings.votesPerPerson - $scope.votesUsed === 0) {
+            return;
+        }
+
+        $scope.votesUsed += 1;
         $socket.emit('topicAddVote', topicId);
     };
 
     $scope.topicRemoveVote = function(topicId) {
+        if ($scope.votesUsed === 0) {
+            return;
+        }
+
+        $scope.votesUsed -= 1;
         $socket.emit('topicRemoveVote', topicId);
     };
 
@@ -86,25 +109,29 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
             return;
         }
 
-        $scope.meeting.admin = personId;
+        $scope.$apply(function() {
+            $scope.meeting.admin = personId;
+        });
     });
 
     $socket.on('meetingStatusUpdated', function(status) {
-        $scope.meeting.status = status;
+        $scope.$apply(function() {
+            $scope.meeting.status = status;
 
-        if (status === $scope.MEETING_STATUS_DISCUSSING) {
-            var topic = lodash.find($scope.meeting.topics, function(t) {
-                return t.status === $scope.TOPIC_STATUS_DISCUSSING;
-            });
+            if (status === $scope.MEETING_STATUS_DISCUSSING) {
+                var topic = lodash.find($scope.meeting.topics, function (t) {
+                    return t.status === $scope.TOPIC_STATUS_DISCUSSING;
+                });
 
-            if (topic === undefined) {
-                // Our meeting is about to be done, so just wait for the next event to come in and handle that.
-                return;
+                if (topic === undefined) {
+                    // Our meeting is about to be done, so just wait for the next event to come in and handle that.
+                    return;
+                }
+
+                $scope.currentTopic = topic;
+                $scope.discussingVoted = false;
             }
-
-            $scope.currentTopic = topic;
-            $scope.discussingVoted = false;
-        }
+        });
     });
 }
 

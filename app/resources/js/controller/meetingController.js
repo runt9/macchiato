@@ -30,11 +30,15 @@ function MeetingController($scope, $http, $cookies, $socket) {
     });
 
     $socket.on('peopleUpdated', function(people) {
-        $scope.meeting.people = people;
+        $scope.$apply(function() {
+            $scope.meeting.people = people;
+        })
     });
 
     $socket.on('topicsUpdated', function(topics) {
-        $scope.meeting.topics = topics;
+        $scope.$apply(function() {
+            $scope.meeting.topics = topics;
+        });
     });
 
     $scope.getMeetingCookie = function() {

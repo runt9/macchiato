@@ -125,7 +125,7 @@ var apiSocketController = function (socket) {
                     break;
 
                 default:
-                    logger.error('Unknown meeting status %s', status);
+                    // Nothing to do here.
                     break;
             }
 

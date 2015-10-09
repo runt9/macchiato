@@ -1,0 +1,6 @@
+div.msg Enter Topic for Discussion
+div: textarea.form-control.topicInput(cols="30", rows="5", placeholder='Enter topic text here', ng-model="newTopicText")
+div.charactersRemaining Characters Remaining: {{100 - newTopicText.length}}
+div
+    button.btn.btn-danger.newTopicReset(ng-click="newTopicText = ''") Reset
+    button.btn.btn-primary(ng-click="addTopic()") Submit
