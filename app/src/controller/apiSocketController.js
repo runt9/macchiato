@@ -15,6 +15,7 @@ var apiSocketController = function (socket) {
     }
 
     function goToNextTopic(meeting) {
+        logger.debug('meeting %s moving to next topic', meeting.id);
         // Grab the next topic to discuss. If there's none left, the meeting is done!
         var topic = _.find(meeting.topics, function(t) {
             return t.status === t.STATUS_TO_DISCUSS;
@@ -23,7 +24,7 @@ var apiSocketController = function (socket) {
         if (topic === undefined) {
             logger.info('Meeting %s complete', meeting.id);
             meeting.updateStatus(meeting.STATUS_DONE);
-            emitToMeeting(meeting.id, 'meetingStatusUpdated', status);
+            emitToMeeting(meeting.id, 'meetingStatusUpdated', meeting.status);
             return;
         }
 
@@ -327,6 +328,7 @@ var apiSocketController = function (socket) {
             topic.removeDiscussingVote();
             // Unanimous decision to stop discussing this topic
             if ((topic.discussingVotes + (meeting.people.length - 1)) === 0) {
+                topic.updateStatus(topic.STATUS_DONE);
                 goToNextTopic(meeting);
             }
 

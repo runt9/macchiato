@@ -4,5 +4,8 @@ div.addTopics(ng-show="meeting.status === MEETING_STATUS_TOPICS_OPEN")
 div.voteTopics(ng-show="meeting.status === MEETING_STATUS_VOTING_OPEN")
     include voteTopics.jade
 
+div.voteTopics(ng-show="meeting.status === MEETING_STATUS_DISCUSSING || meeting.status === MEETING_STATUS_DISCUSSING_VOTING")
+    include currentTopic.jade
+
 script(type="text/ng-template" id="joinMeetingModal.html")
     include joinMeetingModal.jade

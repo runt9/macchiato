@@ -2,7 +2,7 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
     $scope.me = {};
     $scope.newTopicText = '';
     $scope.currentTopic = {};
-    $scope.discussingVoted = false;
+    $scope.discussingVoted = '';
     $scope.votesUsed = 0;
 
     // Run our init function once the parent scope has finished loading the meeting data
@@ -15,7 +15,35 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
         $scope.init();
     }, 100);
 
+    $scope.setCurrentTopic = function() {
+        var topic = lodash.find($scope.meeting.topics, function (t) {
+            return t.status === $scope.TOPIC_STATUS_DISCUSSING || t.status === $scope.MEETING_STATUS_DISCUSSING_VOTING;
+        });
+
+        if (topic === undefined) {
+            // Our meeting is about to be done, so just wait for the next event to come in and handle that.
+            return;
+        }
+
+        if (topic.id !== $scope.currentTopic.id) {
+            $scope.currentTopic = topic;
+            $scope.discussingVoted = '';
+            return;
+        }
+
+        if (topic.status === $scope.TOPIC_STATUS_DISCUSSING && $scope.currentTopic.status === $scope.TOPIC_STATUS_DISCUSSING_VOTING) {
+            $scope.discussingVoted = '';
+            return;
+        }
+
+        $scope.currentTopic = topic;
+    };
+
     $scope.init = function () {
+        if ($scope.meeting.status === $scope.MEETING_STATUS_DISCUSSING || $scope.meeting.status === $scope.MEETING_STATUS_DISCUSSING_VOTING) {
+            $scope.setCurrentTopic();
+        }
+
         // If we've already joined this meeting, "re-join" instead of joining anew.
         var cookie = $scope.getMeetingCookie();
         if (cookie) {
@@ -90,12 +118,12 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
 
     $scope.topicAddDiscussingVote = function(topicId) {
         $socket.emit('topicAddDiscussingVote', topicId);
-        $scope.discussingVoted = true;
+        $scope.discussingVoted = 'positive';
     };
 
     $scope.topicRemoveDiscussingVote = function(topicId) {
         $socket.emit('topicRemoveDiscussingVote', topicId);
-        $scope.discussingVoted = true;
+        $scope.discussingVoted = 'negative';
     };
 
     $socket.on('joinSuccess', function(personId) {
@@ -118,19 +146,16 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
         $scope.$apply(function() {
             $scope.meeting.status = status;
 
-            if (status === $scope.MEETING_STATUS_DISCUSSING) {
-                var topic = lodash.find($scope.meeting.topics, function (t) {
-                    return t.status === $scope.TOPIC_STATUS_DISCUSSING;
-                });
-
-                if (topic === undefined) {
-                    // Our meeting is about to be done, so just wait for the next event to come in and handle that.
-                    return;
-                }
-
-                $scope.currentTopic = topic;
-                $scope.discussingVoted = false;
+            if (status === $scope.MEETING_STATUS_DISCUSSING || $scope.meeting.status === $scope.MEETING_STATUS_DISCUSSING_VOTING) {
+                $scope.setCurrentTopic();
             }
+        });
+    });
+
+    $socket.on('topicsUpdated', function(topics) {
+        $scope.$apply(function() {
+            $scope.meeting.topics = topics;
+            $scope.setCurrentTopic();
         });
     });
 }
