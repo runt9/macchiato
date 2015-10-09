@@ -32,7 +32,7 @@ function MeetingController($scope, $http, $cookies, $socket) {
     $socket.on('peopleUpdated', function(people) {
         $scope.$apply(function() {
             $scope.meeting.people = people;
-        })
+        });
     });
 
     $socket.on('topicsUpdated', function(topics) {
