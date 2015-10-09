@@ -26,7 +26,7 @@ router.get('/meeting/:id', function(req, res, next) {
 
     var cookieName = 'macchiato_' + meetingId;
     var admin = false;
-    if (req.cookies.hasOwnProperty(cookieName)) {
+    if (req.hasOwnProperty('cookies') && req.cookies.hasOwnProperty(cookieName)) {
         if (req.cookies[cookieName] === meeting.admin) {
             admin = true;
         }

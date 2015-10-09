@@ -82,7 +82,7 @@ var apiSocketController = function (socket) {
             switch (status) {
                 case meeting.STATUS_VOTING_CLOSED:
                     // Voting's closed, sort topics by votes and set the first topic status to discussing.
-                    meeting.topics = _.sortBy(meeting.topics, 'votes');
+                    meeting.topics = _.sortBy(meeting.topics, 'votes', ['desc']);
                     if (meeting.topics.length === 0) {
                         logger.error('Voting closed with no topics for meeting %s', meeting.id);
                         return;

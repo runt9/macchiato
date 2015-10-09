@@ -35,6 +35,10 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
         location.reload();
     });
 
+    $scope.isDiscussing = function(topic) {
+        return topic.status === $scope.TOPIC_STATUS_DISCUSSING || topic.status === $scope.TOPIC_STATUS_DISCUSSING_VOTING;
+    };
+
     $socket.on('meetingStatusUpdated', function(status) {
         $scope.$apply(function() {
             $scope.meeting.status = status;

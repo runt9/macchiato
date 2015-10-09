@@ -1,0 +1,21 @@
+button.btn.btn-primary(ng-click="openVoting()", ng-show="meeting.status === MEETING_STATUS_TOPICS_OPEN") Open Voting
+button.btn.btn-primary(ng-click="closeVoting()", ng-show="meeting.status === MEETING_STATUS_VOTING_OPEN") Close Voting
+
+.flexContainer
+    .topicsToDiscuss
+        h2 To Discuss
+        .topic(ng-repeat="topic in meeting.topics | filter: {status: 'STATUS_TO_DISCUSS'}", data-topic-id="{{topic.id}}")
+            p.topicText {{topic.text}}
+            p.topicVotes Votes: {{topic.votes}}
+
+    .topicsToDiscuss
+        h2 Discussing
+        .topic(ng-repeat="topic in meeting.topics | filter: isDiscussing", data-topic-id="{{topic.id}}")
+            p.topicText {{topic.text}}
+            p.topicVotes Votes: {{topic.votes}}
+
+    .topicsToDiscuss
+        h2 Done
+        .topic(ng-repeat="topic in meeting.topics | filter: {status: 'STATUS_DONE'}", data-topic-id="{{topic.id}}")
+            p.topicText {{topic.text}}
+            p.topicVotes Votes: {{topic.votes}}
