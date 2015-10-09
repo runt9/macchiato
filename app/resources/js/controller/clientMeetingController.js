@@ -1,5 +1,8 @@
 function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, lodash) {
     $scope.me = {};
+    $scope.newTopicText = '';
+    $scope.currentTopic = {};
+    $scope.discussingVoted = false;
 
     // Run our init function once the parent scope has finished loading the meeting data
     $scope.waitForLoadedInterval = $interval(function() {
@@ -45,6 +48,33 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
         });
     };
 
+    $scope.addTopic = function() {
+        $socket.emit('addTopic', {text: $scope.newTopicText});
+        $scope.newTopicText = '';
+    };
+
+    $scope.removeTopic = function(topicId) {
+        $socket.emit('removeTopic', topicId);
+    };
+    
+    $scope.topicAddVote = function(topicId) {
+        $socket.emit('topicAddVote', topicId);
+    };
+
+    $scope.topicRemoveVote = function(topicId) {
+        $socket.emit('topicRemoveVote', topicId);
+    };
+
+    $scope.topicAddDiscussingVote = function(topicId) {
+        $socket.emit('topicAddDiscussingVote', topicId);
+        $scope.discussingVoted = true;
+    };
+
+    $scope.topicRemoveDiscussingVote = function(topicId) {
+        $socket.emit('topicRemoveDiscussingVote', topicId);
+        $scope.discussingVoted = true;
+    };
+
     $socket.on('joinSuccess', function(personId) {
         var expires = new Date(new Date().getTime() + (1000 * 60 * 60 * 2)); // 2 Hours
         $cookies.put('macchiato_' + $scope.meeting.id, personId, {expires: expires});
@@ -57,6 +87,24 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
         }
 
         $scope.meeting.admin = personId;
+    });
+
+    $socket.on('meetingStatusUpdated', function(status) {
+        $scope.meeting.status = status;
+
+        if (status === $scope.MEETING_STATUS_DISCUSSING) {
+            var topic = lodash.find($scope.meeting.topics, function(t) {
+                return t.status === $scope.TOPIC_STATUS_DISCUSSING;
+            });
+
+            if (topic === undefined) {
+                // Our meeting is about to be done, so just wait for the next event to come in and handle that.
+                return;
+            }
+
+            $scope.currentTopic = topic;
+            $scope.discussingVoted = false;
+        }
     });
 }
 

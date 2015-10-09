@@ -18,14 +18,12 @@ Topic.prototype = Object.create(Base.prototype);
 Topic.prototype.constructor = Topic;
 
 Topic.prototype.STATUS_TO_DISCUSS = 'STATUS_TO_DISCUSS';
-Topic.prototype.STATUS_OPEN_VOTING = 'STATUS_OPEN_VOTING';
 Topic.prototype.STATUS_DISCUSSING = 'STATUS_DISCUSSING';
 Topic.prototype.STATUS_DISCUSSING_VOTING = 'STATUS_DISCUSSING_VOTING';
 Topic.prototype.STATUS_DONE = 'STATUS_DONE';
 
 Topic.prototype.validStatuses = [
     Topic.prototype.STATUS_TO_DISCUSS,
-    Topic.prototype.STATUS_OPEN_VOTING,
     Topic.prototype.STATUS_DISCUSSING,
     Topic.prototype.STATUS_DISCUSSING_VOTING,
     Topic.prototype.STATUS_DONE
