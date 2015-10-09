@@ -3,7 +3,7 @@ function IndexController($scope, $http, $modal) {
         $modal.open({
             templateUrl: 'newMeetingModal.html',
             backdrop: true,
-            size: 'sm',
+            size: 'lg',
             controller: function($scope, $modalInstance) {
                 $scope.loading = false;
                 $scope.error = null;
@@ -13,8 +13,14 @@ function IndexController($scope, $http, $modal) {
                 $scope.votesPerPerson = 3;
                 
                 $scope.submit = function() {
+                    // TODO: Validate numbers
+                    if ($scope.name === '') {
+                        $scope.error = 'Name must be given!';
+                        return;
+                    }
+
+                    $scope.error = '';
                     $scope.loading = true;
-                    
                     var postData = {
                         name: $scope.name,
                         timePerTopic: $scope.timePerTopic,

@@ -1,9 +1,26 @@
-h4.modal-header New Meeting
-.modal-body
-    div(ng-show="!loading")
-        #newMeetingModalError.alert.alert-danger(ng-show="error") {{error}}
-        input.form-control(type="text", ng-model="name", placeholder="name", autofocus)
-    div(ng-show="loading") Loading...
-.modal-footer
-    button.btn.btn-default(ng-disabled="loading", ng-click="cancel()") Cancel
-    button.btn.btn-primary(ng-disabled="loading", ng-click="submit()") Submit
+.newMeetingModal
+    h4.modal-header Create Lean Coffee Meeting
+    .modal-body
+        div(ng-show="!loading")
+            #newMeetingModalError.alert.alert-danger(ng-show="error") {{error}}
+            div(ng-show="loading") Loading...
+            table.table.settings
+                tbody
+                    tr
+                        td Your Name:
+                        td: span: input.form-control(type="text", size="30", placeholder="enter your name", ng-model="name")
+
+                    tr
+                        td Time per Topic:
+                        td: span: input.form-control(type="number", max="100", min="1", value="4", ng-model="timePerTopic")
+
+                    tr
+                        td Time per Topic After Vote:
+                        td: span: input.form-control(type="number", max="100", min="1", value="2", ng-model="timePerTopicAfterVote")
+
+                    tr
+                        td Votes per Person:
+                        td: span: input.form-control(type="number", max="100", min="1", value="2", ng-model="votesPerPerson")
+    .modal-footer
+        button.btn.btn-default(ng-disabled="loading", ng-click="cancel()") Cancel
+        button.btn.btn-primary(ng-disabled="loading", ng-click="submit()") Submit

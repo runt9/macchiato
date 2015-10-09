@@ -1,0 +1,43 @@
+body {
+    color: navy;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+.hdr {
+    background-color: navy;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.2em;
+}
+
+.main-box {
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.topic-box {
+    text-align: left;
+    font-size: 1.0em;
+}
+
+.settings {
+    text-align: center;
+    font-size: 1.1em;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.settings td {
+    border: none !important;
+}
+
+.msg {
+    text-align: center;
+    padding-top: 10%;
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}

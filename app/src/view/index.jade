@@ -1,5 +1,9 @@
 include header.jade
 body(ng-controller="IndexController")
+    div.main-box
+        div.hdr Macchiato: The Lean Coffee Meeting App
+        div.msg Creating your own Lean Coffee meeting is as simple as clicking on the button below, setting a thing or two, then sharing the link with your attendees!
+        button.btn.btn-primary(ng-click="newMeeting()") Create Lean Coffee Meeting Now
 
 script(type="text/ng-template" id="newMeetingModal.html")
     include newMeetingModal.jade
