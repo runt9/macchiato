@@ -11,7 +11,7 @@ var _ = require('lodash');
  */
 var Meeting = function(settings, admin) {
     Base.call(this, 'meeting');
-    this.admin = admin;
+    this.admin = admin.id;
     this.settings = settings;
     this.people = [admin];
     this.topics = [];
@@ -19,19 +19,6 @@ var Meeting = function(settings, admin) {
 
 Meeting.prototype = Object.create(Base.prototype);
 Meeting.prototype.constructor = Meeting;
-
-/**
- * Gets a person for a meeting. Returns null on failure.
- * @param personId
- * @returns {Person}
- */
-Meeting.prototype.getPerson = function(personId) {
-    var person = _.find(this.people, function (person) {
-        return person.id === personId;
-    });
-
-    return person === undefined ? null : person;
-};
 
 /**
  * Creates a new person with the given name and joins them to our meeting.
@@ -55,6 +42,24 @@ Meeting.prototype.personRemove = function (personId) {
     });
 
     return removed.length === 1;
+};
+
+/**
+ * Promotes a person to admin. Returns true on success.
+ * @param personId
+ * @returns {boolean}
+ */
+Meeting.prototype.personPromote = function (personId) {
+    var person = _.find(this.people, function(person) {
+        return person.id === personId;
+    });
+
+    if (person === undefined) {
+        return false;
+    }
+
+    this.admin = person.id;
+    return true;
 };
 
 /**

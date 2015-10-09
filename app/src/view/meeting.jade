@@ -1,2 +1,8 @@
 include header.jade
 body(ng-controller="MeetingController")
+    if admin == true
+        .adminMeeting(ng-controller="AdminMeetingController")
+            include adminMeeting.jade
+    else
+        .clientMeeting(ng-controller="ClientMeetingController")
+            include clientMeeting.jade

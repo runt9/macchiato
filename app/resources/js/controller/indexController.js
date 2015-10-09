@@ -8,8 +8,7 @@ function IndexController($scope, $http, $modal) {
                 $scope.loading = false;
                 $scope.error = null;
                 $scope.name = '';
-                $scope.meetingLength = 4;
-                $scope.timePerTopic = 2;
+                $scope.timePerTopic = 4;
                 $scope.timePerTopicAfterVote = 2;
                 $scope.votesPerPerson = 3;
                 
@@ -18,7 +17,6 @@ function IndexController($scope, $http, $modal) {
                     
                     var postData = {
                         name: $scope.name,
-                        meetingLength: $scope.meetingLength,
                         timePerTopic: $scope.timePerTopic,
                         timePerTopicAfterVote: $scope.timePerTopicAfterVote,
                         votesPerPerson: $scope.votesPerPerson

@@ -58,8 +58,10 @@ var apiSocketController = function (socket) {
             if (meeting === null) {
                 return;
             }
+
             var person = meeting.personJoin(personName);
-            emitToMeeting(meetingId, 'personAdded', person);
+            client.emit('joinSuccess', person.id);
+            emitToMeeting(meetingId, 'peopleUpdated', meeting.people);
         });
 
         // Event to remove a person from a meeting
@@ -71,13 +73,33 @@ var apiSocketController = function (socket) {
             if (meeting === null) {
                 return;
             }
+
             var success = meeting.personRemove(personId);
             if (success) {
-                emitToMeeting(meetingId, 'personRemoved', personId);
+                emitToMeeting(meetingId, 'peopleUpdated', meeting.people);
                 return;
             }
 
             logger.error('Failed to delete person %s', personId);
+        });
+
+        // Event to promote a person to admin
+        client.on('promotePerson', function (personId) {
+            var meetingId = client.meetingId;
+
+            logger.debug('meeting %s person promote %s', meetingId, personId);
+            var meeting = db.getMeeting(meetingId);
+            if (meeting === null) {
+                return;
+            }
+
+            var success = meeting.personPromote(personId);
+            if (success) {
+                emitToMeeting(meetingId, 'personPromoted', personId);
+                return;
+            }
+
+            logger.error('Failed to promote person %s', personId);
         });
         //endregion
 
@@ -93,8 +115,9 @@ var apiSocketController = function (socket) {
             if (meeting === null) {
                 return;
             }
+
             var topic = meeting.addTopic(topicText);
-            emitToMeeting(meetingId, 'topicAdded', topic);
+            emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
 
         // Event to remove a topic from a meeting
@@ -106,9 +129,10 @@ var apiSocketController = function (socket) {
             if (meeting === null) {
                 return;
             }
+
             var success = meeting.topicRemove(topicId);
             if (success) {
-                emitToMeeting(meetingId, 'topicRemoved', topicId);
+                emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
                 return;
             }
 
@@ -126,6 +150,7 @@ var apiSocketController = function (socket) {
             if (meeting === null) {
                 return;
             }
+
             var topic = meeting.getTopic(topicId);
             if (topic === null) {
                 return;
@@ -136,7 +161,7 @@ var apiSocketController = function (socket) {
             }
 
             topic.updateStatus(topicStatus);
-            emitToMeeting(meetingId, 'topicUpdated', topic);
+            emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
 
         // Event to add a vote to a topic
@@ -148,13 +173,14 @@ var apiSocketController = function (socket) {
             if (meeting === null) {
                 return;
             }
+
             var topic = meeting.getTopic(topicId);
             if (topic === null) {
                 return;
             }
 
             topic.addVote();
-            emitToMeeting(meetingId, 'topicUpdated', topic);
+            emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
 
         // Event to remove a vote to a topic
@@ -166,13 +192,14 @@ var apiSocketController = function (socket) {
             if (meeting === null) {
                 return;
             }
+
             var topic = meeting.getTopic(topicId);
             if (topic === null) {
                 return;
             }
 
             topic.removeVote();
-            emitToMeeting(meetingId, 'topicUpdated', topic);
+            emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
 
         // Event to add a discussing vote to a topic
@@ -184,13 +211,14 @@ var apiSocketController = function (socket) {
             if (meeting === null) {
                 return;
             }
+
             var topic = meeting.getTopic(topicId);
             if (topic === null) {
                 return;
             }
 
             topic.addDiscussingVote();
-            emitToMeeting(meetingId, 'topicUpdated', topic);
+            emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
 
         // Event to remove a discussing vote to a topic
@@ -202,13 +230,14 @@ var apiSocketController = function (socket) {
             if (meeting === null) {
                 return;
             }
+
             var topic = meeting.getTopic(topicId);
             if (topic === null) {
                 return;
             }
 
             topic.removeDiscussingVote();
-            emitToMeeting(meetingId, 'topicUpdated', topic);
+            emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
         //endregion
     });

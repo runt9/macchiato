@@ -1,6 +1,7 @@
 var express = require('express');
 var logger = require('logger');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var app = express();
 
 // Initial config
@@ -16,6 +17,7 @@ app.use('/templates/:name', function (req, res) {
     res.render(req.params.name);
 });
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // Router imports
 logger.debug('Loading routers');
