@@ -1,0 +1,18 @@
+html
+    head
+        title 'Enter Topic'
+        style
+            include create.css
+    body
+        
+        div.settings
+            div.msg Enter Topic for Discussion
+            
+                p.topic-box
+                    input(type="textarea", style="height: 150px;width:100%",  placeholder='Enter topic text here')
+                                    
+            p
+                input(type="submit", value="Stop", class="cancel", style="float: left")
+                     
+                input(type="submit", value="Go", class="go", style="float: right")
+            div.msg 
