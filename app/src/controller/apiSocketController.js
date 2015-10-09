@@ -14,6 +14,23 @@ var apiSocketController = function (socket) {
         });
     }
 
+    function goToNextTopic(meeting) {
+        // Grab the next topic to discuss. If there's none left, the meeting is done!
+        var topic = _.find(meeting.topics, function(t) {
+            return t.status === t.STATUS_TO_DISCUSS;
+        });
+
+        if (topic === undefined) {
+            logger.info('Meeting %s complete', meeting.id);
+            meeting.updateStatus(meeting.STATUS_DONE);
+            emitToMeeting(meeting.id, 'meetingStatusUpdated', status);
+            return;
+        }
+
+        // Alright, next topic. Set it to discussing and update the client.
+        topic.updateStatus(topic.STATUS_DISCUSSING);
+    }
+
     socket.on('connection', function (client) {
         logger.debug('New connection');
 
@@ -44,6 +61,77 @@ var apiSocketController = function (socket) {
             client['clientGuid'] = clientGuid;
             client.connected = true;
             clients.push(client);
+        });
+
+        // Event to update a meeting's status
+        client.on('updateMeetingStatus', function (status) {
+            var meetingId = client.meetingId;
+
+            logger.debug('meeting %s status %s', meetingId, status);
+            var meeting = db.getMeeting(meetingId);
+            if (meeting === null) {
+                return;
+            }
+
+            if (!meeting.isValidStatus(status)) {
+                return;
+            }
+
+            var topic;
+            switch (status) {
+                case meeting.STATUS_VOTING_CLOSED:
+                    // Voting's closed, sort topics by votes and set the first topic status to discussing.
+                    meeting.topics = _.sortBy(meeting.topics, 'votes');
+                    if (meeting.topics.length === 0) {
+                        logger.error('Voting closed with no topics for meeting %s', meeting.id);
+                        return;
+                    }
+
+                    // Now that we've sorted the topics, let everyone know that the meeting is in discussion mode now.
+                    status = meeting.STATUS_DISCUSSING;
+                    topic = meeting.topics[0];
+                    topic.updateStatus(topic.STATUS_DISCUSSING);
+                    break;
+
+                case meeting.STATUS_DISCUSSING:
+                    // First find if we are voting to continue a topic.
+                    topic = _.find(meeting.topics, function(t) {
+                        return t.status === t.STATUS_DISCUSSING_VOTING;
+                    });
+
+                    // If we finished voting on a topic and that topic has positive votes (meaning the majority want
+                    // to continue talking), reset it to discussing and go. Otherwise mark it as done.
+                    if (topic !== undefined) {
+                        // Re-discussing the current topic
+                        if (topic.discussingVotes > 0) {
+                            topic.updateStatus(topic.STATUS_DISCUSSING);
+                            topic.discussingVotes = 0;
+                            break;
+                        }
+
+                        topic.updateStatus(topic.STATUS_DONE);
+                    }
+
+                    goToNextTopic(meeting);
+                    break;
+
+                case meeting.STATUS_DISCUSSING_VOTING:
+                    // Find our currently discussing topic and mark it as voting.
+                    topic = _.find(meeting.topics, function(t) {
+                        return t.status === t.STATUS_DISCUSSING;
+                    });
+
+                    topic.updateStatus(topic.STATUS_DISCUSSING_VOTING);
+                    break;
+
+                default:
+                    logger.error('Unknown meeting status %s', status);
+                    break;
+            }
+
+            emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
+            meeting.updateStatus(status);
+            emitToMeeting(meetingId, 'meetingStatusUpdated', status);
         });
 
         //region Person Management
@@ -237,6 +325,11 @@ var apiSocketController = function (socket) {
             }
 
             topic.removeDiscussingVote();
+            // Unanimous decision to stop discussing this topic
+            if ((topic.discussingVotes + (meeting.people.length - 1)) === 0) {
+                goToNextTopic(meeting);
+            }
+
             emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
         //endregion

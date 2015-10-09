@@ -1,4 +1,16 @@
 function MeetingController($scope, $http, $cookies, $socket) {
+    $scope.MEETING_STATUS_TOPICS_OPEN = 'STATUS_TOPICS_OPEN';
+    $scope.MEETING_STATUS_VOTING_OPEN = 'STATUS_VOTING_OPEN';
+    $scope.MEETING_STATUS_VOTING_CLOSED = 'STATUS_VOTING_CLOSED';
+    $scope.MEETING_STATUS_DISCUSSING = 'STATUS_DISCUSSING';
+    $scope.MEETING_STATUS_DISCUSSING_VOTING = 'STATUS_DISCUSSING_VOTING';
+    $scope.MEETING_STATUS_DONE = 'STATUS_DONE';
+
+    $scope.TOPIC_STATUS_TO_DISCUSS = 'STATUS_TO_DISCUSS';
+    $scope.TOPIC_STATUS_DISCUSSING = 'STATUS_DISCUSSING';
+    $scope.TOPIC_STATUS_DISCUSSING_VOTING = 'STATUS_DISCUSSING_VOTING';
+    $scope.TOPIC_STATUS_DONE = 'STATUS_DONE';
+
     $scope.error = null;
     $scope.loading = true;
     $scope.isAdmin = false;
@@ -12,38 +24,10 @@ function MeetingController($scope, $http, $cookies, $socket) {
         }
 
         $socket.emit('meetingConnected', meeting.id);
-        $scope.timer.time = meeting.settings['timePerTopic'];
     }).error(function(error) {
         $scope.loading = false;
         $scope.error = error;
     });
-
-    $scope.timer = {
-        time: 0,
-        playing: false,
-
-        updateTimer: function() {
-            if ($scope.timer.playing && $scope.timer.time > 0) {
-                $scope.timer.time--;
-            }
-        },
-
-        formatTime: function() {
-            var time = $scope.timer.time;
-
-            var minutes = Math.floor(time / 60);
-            var seconds = Math.floor(time - (minutes * 60));
-            if (seconds < 10) {
-                seconds = '0' + seconds;
-            }
-
-            return minutes + ':' + seconds;
-        },
-
-        toggle: function() {
-            $scope.timer.playing = !$scope.timer.playing;
-        }
-    };
 
     $socket.on('peopleUpdated', function(people) {
         $scope.meeting.people = people;
