@@ -1,14 +1,15 @@
 html
     head
-        title 'Current Topic'
+        title 'Enter Topic'
         style
             include create.css
     body
         
         div.settings
-            div.msg Current Topic
+            div.msg Enter Topic
             
-                p.topic-box  Vivamus a orci vel arcu posuere faucibus. Morbi quis fermentum metus. Nam imperdiet sagittis nulla. Donec eu pulvinar nisi. Aliquam egestas, diam eget convallis mattis, tellus libero dapibus sem
+                p.topic-box
+                    input(type="textarea", style="height: 150px;width:100%",  placeholder='Enter topic text here')
                                     
             p
                 input(type="submit", value="Stop", class="cancel", style="float: left")

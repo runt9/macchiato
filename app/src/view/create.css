@@ -21,6 +21,12 @@ body {color: navy;
         font-size: 1.1em;
         width: 40%;}
 
+
+.list {border: solid thin navy;
+        text-align: center;
+        font-size: 1.1em;
+        }
+
 .msg {text-align: center;
         padding-top: 10%;
         padding-left: 10%;

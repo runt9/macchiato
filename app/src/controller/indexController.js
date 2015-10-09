@@ -20,4 +20,14 @@ router.get('/current', function (req, res) {
     logger.debug('index [%s]', req.url);
     res.status(200).render('current', {current: {msg: 'Hello World!'}});
 });
+
+router.get('/topic', function (req, res) {
+    logger.debug('index [%s]', req.url);
+    res.status(200).render('topic', {topic: {msg: 'Hello World!'}});
+});
+
+router.get('/single_topic', function (req, res) {
+    logger.debug('index [%s]', req.url);
+    res.status(200).render('single_topic', {topic: {msg: 'Hello World!'}});
+});
 module.exports = router;
