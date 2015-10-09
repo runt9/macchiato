@@ -1,0 +1,9 @@
+h4.modal-header New Meeting
+.modal-body
+    div(ng-show="!loading")
+        #newMeetingModalError.alert.alert-danger(ng-show="error") {{error}}
+        input.form-control(type="text", ng-model="name", placeholder="name", autofocus)
+    div(ng-show="loading") Loading...
+.modal-footer
+    button.btn.btn-default(ng-disabled="loading", ng-click="cancel()") Cancel
+    button.btn.btn-primary(ng-disabled="loading", ng-click="submit()") Submit

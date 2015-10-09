@@ -10,12 +10,17 @@ app.set('views', __dirname + '/view');
 
 // Middleware setup
 logger.debug('Setting up middleware');
-app.use(express.static('resources'));
+app.use('/3rdparty', express.static(__dirname + '/../../node_modules'));
+app.use(express.static(__dirname + '/../resources'));
+app.use('/templates/:name', function (req, res) {
+    res.render(req.params.name);
+});
 app.use(bodyParser.json());
 
 // Router imports
 logger.debug('Loading routers');
 app.use(require('controller/indexController'));
+app.use(require('controller/meetingController'));
 
 // Error handler import
 app.use(require('controller/errorController'));

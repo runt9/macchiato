@@ -10,11 +10,16 @@
     "url": "runt9@git://github.com/runt9/macchiato/tree/master"
   },
   "dependencies": {
+    "angular": "^1.4.7",
+    "angular-bootstrap": "^0.12.2",
+    "angular-cookies": "^1.4.7",
     "app-module-path": "~1.0.4",
     "body-parser": "^1.14.1",
+    "bootstrap": "^3.3.5",
     "crypto": "0.0.3",
     "express": "~4.13.3",
     "jade": "~1.11.0",
+    "jquery": "^2.1.4",
     "lodash": "~3.10.1",
     "moment": "~2.10.6",
     "nconf": "^0.8.2",
