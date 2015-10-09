@@ -1,5 +1,3 @@
-var socket = io();
-
 angular.module('Macchiato', [
     'ui.bootstrap',
     'socket-io',

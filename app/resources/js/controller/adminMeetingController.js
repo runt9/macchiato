@@ -1,4 +1,4 @@
-function AdminMeetingController($scope, $socket, $cookies) {
+function AdminMeetingController($scope, $socket) {
     $scope.kickPerson = function(person) {
         $socket.send('removePerson', person.id);
     };

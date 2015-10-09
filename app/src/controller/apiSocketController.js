@@ -116,7 +116,7 @@ var apiSocketController = function (socket) {
                 return;
             }
 
-            var topic = meeting.addTopic(topicText);
+            meeting.addTopic(topicText);
             emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
 
