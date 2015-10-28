@@ -1,3 +1,71 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+}
+
+.adminMeeting {
+    position: absolute;
+    top: 52px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.peopleContainerPositioner {
+    float: left;
+    color: #777777;
+    width: 200px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
+
+.peopleContainer {
+    background-color: #F8F8F8;
+    border-right: 1px solid #E7E7E7;
+    height: 100%;
+}
+
+.peopleContainer .peopleHeader {
+    font-size: 1.4em;
+    font-weight: bold;
+    padding: 10px 0;
+    border-bottom: 1px solid #E7E7E7;
+}
+
+.peopleContainer .person {
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #E7E7E7;
+}
+
+.peopleContainer .person:hover {
+    background-color: #E7E7E7;
+}
+
+.peopleContainer .person .glyphicon {
+    float: right;
+    margin: 0 5px;
+    font-size: 1.2em;
+}
+
+.peopleContainer .person .glyphicon-star:hover {
+    color: #FFFF00;
+}
+
+.peopleContainer .person .glyphicon-remove:hover {
+    color: #FF0000;
+}
+
 .flexContainer {
+    height: 100%;
+    margin-left: 200px;
     display: flex;
+    padding: 20px 0;
 }

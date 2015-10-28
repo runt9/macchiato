@@ -15,6 +15,14 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
         $scope.timer.time = $scope.meeting.settings['timePerTopic'];
     };
 
+    $scope.personNameEllipses = function(name) {
+        return name.length > 11 ? name.substr(0, 12) + '...' : name;
+    };
+
+    $scope.isPersonAdmin = function(person) {
+        return person.id === $scope.meeting.admin;
+    };
+
     $scope.kickPerson = function(person) {
         $socket.emit('removePerson', person.id);
     };
