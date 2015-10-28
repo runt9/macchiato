@@ -14,8 +14,7 @@ body {
     bottom: 0;
 }
 
-.peopleContainerPositioner {
-    float: left;
+.sidebarPositioner {
     color: #777777;
     width: 200px;
     height: 100%;
@@ -23,20 +22,19 @@ body {
     top: 0;
 }
 
-.peopleContainer {
+.sidebarContainer {
     background-color: #F8F8F8;
-    border-right: 1px solid #E7E7E7;
     height: 100%;
 }
 
-.peopleContainer .peopleHeader {
+.sidebarHeader {
     font-size: 1.4em;
     font-weight: bold;
     padding: 10px 0;
     border-bottom: 1px solid #E7E7E7;
 }
 
-.peopleContainer .person {
+.sidebarRow {
     font-size: 1.1em;
     font-weight: bold;
     text-align: left;
@@ -45,8 +43,16 @@ body {
     border-bottom: 1px solid #E7E7E7;
 }
 
-.peopleContainer .person:hover {
+.sidebarRow:hover {
     background-color: #E7E7E7;
+}
+
+.peopleContainerPositioner {
+    left: 0;
+}
+
+.peopleContainer {
+    border-right: 1px solid #E7E7E7;
 }
 
 .peopleContainer .person .glyphicon {
@@ -63,9 +69,34 @@ body {
     color: #FF0000;
 }
 
+.adminControlsContainerPositioner {
+    right: 0;
+}
+
+.adminControlsContainer {
+    border-left: 1px solid #E7E7E7;
+}
+
+.adminControlsContainer .sidebarRow {
+    text-align: center;
+}
+
+.customTimeError {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-top: 3px;
+    color: red;
+}
+
+.timer {
+    font-size: 4em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .flexContainer {
     height: 100%;
-    margin-left: 200px;
+    margin: 0 200px;
     display: flex;
     padding: 20px 0;
 }

@@ -2,11 +2,10 @@ include header.jade
 body(ng-controller="MeetingController")
     include base
 
-    .alert.alert-danger(ng-show="error") {{error}}
-
     if admin == true
         .adminMeeting(ng-controller="AdminMeetingController")
             include adminMeeting.jade
     else
+        .alert.alert-danger(ng-show="error") {{error}}
         .clientMeeting(ng-controller="ClientMeetingController")
             include clientMeeting.jade

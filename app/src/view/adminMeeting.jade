@@ -1,14 +1,24 @@
-.peopleContainerPositioner
-    .peopleContainer
-        .peopleHeader People
-        .person(ng-repeat="person in meeting.people")
+.peopleContainerPositioner.sidebarPositioner
+    .peopleContainer.sidebarContainer
+        .sidebarHeader People
+        .person.sidebarRow(ng-repeat="person in meeting.people")
             span(title="{{person.name}}") {{personNameEllipses(person.name)}}
             span.glyphicon.glyphicon-remove(ng-click="kickPerson(person)", ng-show="!isPersonAdmin(person)")
             span.glyphicon.glyphicon-star(ng-click="promotePerson(person)", ng-show="!isPersonAdmin(person)")
 
-.adminControlsContainer
-    button.btn.btn-default(ng-click="openVoting()", ng-show="meeting.status === MEETING_STATUS_TOPICS_OPEN") Open Voting
-    button.btn.btn-default(ng-click="closeVoting()", ng-show="meeting.status === MEETING_STATUS_VOTING_OPEN") Close Voting
+.adminControlsContainerPositioner.sidebarPositioner
+    .adminControlsContainer.sidebarContainer
+        .sidebarHeader Admin Controls
+        .sidebarRow(ng-click="openVoting()", ng-show="meeting.status === MEETING_STATUS_TOPICS_OPEN") Open Voting
+        .sidebarRow(ng-click="closeVoting()", ng-show="meeting.status === MEETING_STATUS_VOTING_OPEN") Close Voting
+        .sidebarRow(ng-click="timer.reset()") Reset Timer
+        .sidebarRow(ng-click="settingTimer = true", ng-show="!settingTimer") Set Timer
+        .sidebarRow(ng-click="timer.setCustomTime(newTimerTime)", ng-show="settingTimer") Set Timer
+        .sidebarRow(ng-show="settingTimer")
+            input.form-control(type="text", ng-model="newTimerTime")
+            .customTimeError(ng-show="customTimeError") {{customTimeError}}
+
+.timer(ng-click="timer.toggle()" ng-class="{'text-danger': timer.time < 30}") {{timer.formatTime()}}
 
 .flexContainer
     .topicsToDiscussContainer

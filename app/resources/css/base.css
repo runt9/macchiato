@@ -1,9 +1,9 @@
 body {
     text-align: center;
-}
-
-.macchiato-navbar {
-
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 nav a {
