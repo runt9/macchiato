@@ -32,8 +32,9 @@ nav a {
 .topicVotes {
     position: absolute;
     right: 7px;
-    bottom: -10px;
-    font-size: 0.8em;
+    bottom: -25px;
+    font-size: 4em;
+    font-family: serif;
 }
 
 .topic .vote {

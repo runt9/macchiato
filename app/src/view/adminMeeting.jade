@@ -1,9 +1,11 @@
+.timer: span(ng-click="timer.toggle()" ng-class="{'text-danger': timer.time < 30}") {{timer.formatTime()}}
+
 .peopleContainerPositioner.sidebarPositioner
     .peopleContainer.sidebarContainer
         .sidebarHeader People
         .person.sidebarRow(ng-repeat="person in meeting.people")
             span(title="{{person.name}}") {{personNameEllipses(person.name)}}
-            span.glyphicon.glyphicon-remove(ng-click="kickPerson(person)", ng-show="!isPersonAdmin(person)")
+            span.glyphicon.glyphicon-remove(ng-click="removePerson(person)", ng-show="!isPersonAdmin(person)")
             span.glyphicon.glyphicon-star(ng-click="promotePerson(person)", ng-show="!isPersonAdmin(person)")
 
 .adminControlsContainerPositioner.sidebarPositioner
@@ -18,26 +20,24 @@
             input.form-control(type="text", ng-model="newTimerTime")
             .customTimeError(ng-show="customTimeError") {{customTimeError}}
 
-.timer(ng-click="timer.toggle()" ng-class="{'text-danger': timer.time < 30}") {{timer.formatTime()}}
-
 .flexContainer
     .topicsToDiscussContainer
         .topicsHeader To Discuss
         .topicsToDiscuss
             .topic(ng-repeat="topic in meeting.topics | filter: {status: 'STATUS_TO_DISCUSS'}", data-topic-id="{{topic.id}}")
                 p.topicText {{topic.text}}
-                p.topicVotes Votes: {{topic.votes}}
+                p.topicVotes {{dotVotes(topic)}}
 
     .topicsToDiscussContainer
         .topicsHeader Discussing
         .topicsToDiscuss
             .topic(ng-repeat="topic in meeting.topics | filter: isDiscussing", data-topic-id="{{topic.id}}")
                 p.topicText {{topic.text}}
-                p.topicVotes Votes: {{topic.votes}}
+                p.topicVotes {{dotVotes(topic)}}
 
     .topicsToDiscussContainer
         .topicsHeader Done
         .topicsToDiscuss
             .topic(ng-repeat="topic in meeting.topics | filter: {status: 'STATUS_DONE'}", data-topic-id="{{topic.id}}")
                 p.topicText {{topic.text}}
-                p.topicVotes Votes: {{topic.votes}}
+                p.topicVotes {{dotVotes(topic)}}

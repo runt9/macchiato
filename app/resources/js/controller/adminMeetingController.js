@@ -1,4 +1,4 @@
-function AdminMeetingController($scope, $socket, $interval, lodash) {
+function AdminMeetingController($scope, $socket, $interval, lodash, $cookies) {
     $scope.currentTopic = null;
     $scope.settingTimer = false;
     $scope.newTimerTime = '';
@@ -17,8 +17,6 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
         $scope.timer.timePerTopic = $scope.meeting.settings['timePerTopic'] * 60;
         $scope.timer.timePerTopicAfterVote = $scope.meeting.settings['timePerTopicAfterVote'] * 60;
         $scope.timer.time = $scope.timer.timePerTopic;
-
-        $interval($scope.timer.updateTimer, 1000);
     };
 
     $scope.personNameEllipses = function(name) {
@@ -27,14 +25,6 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
 
     $scope.isPersonAdmin = function(person) {
         return person.id === $scope.meeting.admin;
-    };
-
-    $scope.kickPerson = function(person) {
-        $socket.emit('removePerson', person.id);
-    };
-
-    $scope.promotePerson = function(person) {
-        $socket.emit('promotePerson', person.id);
     };
 
     $scope.openVoting = function() {
@@ -46,6 +36,10 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
     };
 
     $socket.on('personPromoted', function() {
+        if ($scope.isLeaving) {
+            return;
+        }
+
         location.reload();
     });
 
@@ -58,9 +52,11 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
             $scope.meeting.status = status;
 
             if (status === $scope.MEETING_STATUS_DISCUSSING) {
+                $scope.timer.stopTimer();
                 var topic = lodash.find($scope.meeting.topics, function (t) {
                     return t.status === $scope.TOPIC_STATUS_DISCUSSING;
                 });
+
 
                 if (topic === undefined) {
                     // Our meeting is about to be done, so just wait for the next event to come in and handle that.
@@ -81,7 +77,7 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
                     }
                 }
 
-                $scope.timer.playing = true;
+                $scope.timer.startTimer();
             }
         });
     });
@@ -91,17 +87,42 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
         timePerTopic: 0,
         timePerTopicAfterVoting: 0,
         playing: false,
+        timerInterval: null,
 
         updateTimer: function() {
-            if ($scope.timer.playing) {
-                if ($scope.timer.time > 0) {
-                    $scope.timer.time--;
-                    if ($scope.timer.time === 0) {
-                        $socket.emit('updateMeetingStatus', $scope.MEETING_STATUS_DISCUSSING_VOTING);
-                        $scope.timer.playing = false;
-                    }
-                }
+            // Out of time, stop the timer!
+            if ($scope.timer.time === 0) {
+                $scope.timer.stopTimer();
+                return;
             }
+
+            // Decrement the timer and keep going if there's still time left;
+            $scope.timer.time--;
+            if ($scope.timer.time > 0) {
+                return;
+            }
+
+            // Shouldn't happen, but just... don't do anything if we're not discussing a topic?
+            if ($scope.meeting.status !== $scope.MEETING_STATUS_DISCUSSING) {
+                return;
+            }
+
+            // We finished a topic, so start voting on it and stop the timer.
+            $socket.emit('updateMeetingStatus', $scope.MEETING_STATUS_DISCUSSING_VOTING);
+            $scope.timer.stopTimer();
+        },
+
+        startTimer: function() {
+            if ($scope.timer.timerInterval === null) {
+                $scope.timer.timerInterval = $interval($scope.timer.updateTimer, 1000);
+                $scope.timer.playing = true;
+            }
+        },
+
+        stopTimer: function() {
+            $interval.cancel($scope.timer.timerInterval);
+            $scope.timer.playing = false;
+            $scope.timer.timerInterval = null;
         },
 
         formatTime: function() {
@@ -122,7 +143,11 @@ function AdminMeetingController($scope, $socket, $interval, lodash) {
         },
 
         toggle: function() {
-            $scope.timer.playing = !$scope.timer.playing;
+            if ($scope.timer.playing) {
+                $scope.timer.stopTimer();
+            } else {
+                $scope.timer.startTimer();
+            }
         },
 
         reset: function() {

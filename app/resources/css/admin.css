@@ -12,6 +12,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
+    display: flex;
 }
 
 .sidebarPositioner {
@@ -91,6 +92,13 @@ body {
 .timer {
     font-size: 4em;
     font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.timer span {
     cursor: pointer;
 }
 
@@ -98,5 +106,6 @@ body {
     height: 100%;
     margin: 0 200px;
     display: flex;
-    padding: 20px 0;
+    padding: 80px 0 20px;
+    flex-grow: 1;
 }
