@@ -74,7 +74,10 @@ module.exports = function(grunt) {
 
         watch: {
             files: ['<%= paths.app.resources %>/css/**/*.css', '<%= paths.app.resources %>/js/**/*.js'],
-            tasks: ['clean:dev', 'concat:dev']
+            tasks: ['clean:dev', 'concat:dev'],
+            options: {
+                livereload: true
+            }
         }
     });
 

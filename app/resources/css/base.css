@@ -1,0 +1,84 @@
+body {
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+nav a {
+    cursor: pointer;
+}
+
+.topic {
+    position: relative;
+    border: 1px solid #CCCCCC;
+    margin: 6px;
+    height: 75px;
+    background-color: #FEFEFE;
+    box-shadow: 1px 1px 3px #999999;
+    border-radius: 4px;
+}
+
+.topicText {
+    display: table-cell;
+    height: 75px;
+    width: 280px;
+    padding-left: 20px;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+.topicVotes {
+    position: absolute;
+    right: 7px;
+    bottom: -25px;
+    font-size: 4em;
+    font-family: serif;
+}
+
+.topic .vote {
+    cursor: pointer;
+    position: absolute;
+    left: 10px;
+    font-size: 1.4em;
+}
+
+.topic .vote:hover {
+    color: #00b3ee;
+}
+
+.topic .addVote {
+    top: 7px;
+}
+
+.topic .removeVote {
+    bottom: 7px;
+    top: auto;
+}
+
+.topicsToDiscussContainer {
+    width: 300px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px 20px 5px;
+    background-color: #DDDDDD;
+    border-radius: 5px;
+    border: 1px solid #BBBBBB;
+}
+
+.topicsToDiscuss {
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.topicsHeader {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-top: 10px;
+}

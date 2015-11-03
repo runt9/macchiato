@@ -26,13 +26,13 @@ router.get('/meeting/:id', function(req, res, next) {
 
     var cookieName = 'macchiato_' + meetingId;
     var admin = false;
-    if (req.hasOwnProperty('cookies') && req.cookies.hasOwnProperty(cookieName)) {
+    if (req.hasOwnProperty('cookies') && Object.prototype.hasOwnProperty.call(req.cookies, cookieName)) {
         if (req.cookies[cookieName] === meeting.admin) {
             admin = true;
         }
     }
 
-    res.status(200).render('meeting', {admin: admin});
+    res.status(200).render('meeting', {admin: admin, meeting: true});
 });
 
 router.get('/api/meeting/:id', function(req, res) {

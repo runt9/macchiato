@@ -4,4 +4,4 @@ p Below are the topics ready to be discussed. You have {{meeting.settings.votesP
         span.glyphicon.glyphicon-plus.vote.addVote(ng-click="topicAddVote(topic.id)")
         span.glyphicon.glyphicon-minus.vote.removeVote(ng-click="topicRemoveVote(topic.id)")
         p.topicText {{topic.text}}
-        p.topicVotes Votes: {{topic.votes}}
+        p.topicVotes {{dotVotes(topic)}}

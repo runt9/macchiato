@@ -82,7 +82,7 @@ var apiSocketController = function (socket) {
             switch (status) {
                 case meeting.STATUS_VOTING_CLOSED:
                     // Voting's closed, sort topics by votes and set the first topic status to discussing.
-                    meeting.topics = _.sortBy(meeting.topics, 'votes', ['desc']);
+                    meeting.topics = _.sortByOrder(meeting.topics, 'votes', ['desc']);
                     if (meeting.topics.length === 0) {
                         logger.error('Voting closed with no topics for meeting %s', meeting.id);
                         return;
@@ -330,6 +330,9 @@ var apiSocketController = function (socket) {
             if ((topic.discussingVotes + (meeting.people.length - 1)) === 0) {
                 topic.updateStatus(topic.STATUS_DONE);
                 goToNextTopic(meeting);
+                emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
+                emitToMeeting(meetingId, 'meetingStatusUpdated', meeting.STATUS_DISCUSSING);
+                return;
             }
 
             emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);

@@ -1,11 +1,11 @@
 include header.jade
 body(ng-controller="MeetingController")
-    div.hdr Macchiato: The Lean Coffee Meeting App
-    .alert.alert-danger(ng-show="error") {{error}}
+    include base
 
     if admin == true
         .adminMeeting(ng-controller="AdminMeetingController")
             include adminMeeting.jade
     else
+        .alert.alert-danger(ng-show="error") {{error}}
         .clientMeeting(ng-controller="ClientMeetingController")
             include clientMeeting.jade
