@@ -1,6 +1,6 @@
 p This is the current topic being discussed! You can vote to continue or stop talking at any time by using the thumbs up/down buttons.
 .topicsToDiscuss
     .topic(data-topic-id="{{currentTopic.id}}")
-        span.glyphicon.glyphicon-thumbs-up.vote.addVote(ng-click="topicAddDiscussingVote(currentTopic.id)", ng-hide="discussingVoted === 'positive'")
-        span.glyphicon.glyphicon-thumbs-down.vote.removeVote(ng-click="topicRemoveDiscussingVote(currentTopic.id)", ng-hide="discussingVoted === 'negative'")
+        span.glyphicon.glyphicon-thumbs-up.vote.addVote(ng-click="topicAddDiscussingVote(currentTopic.id)", ng-hide="discussingVoted === true")
+        span.glyphicon.glyphicon-thumbs-down.vote.removeVote(ng-click="topicRemoveDiscussingVote(currentTopic.id)", ng-hide="discussingVoted === false")
         p.topicText {{currentTopic.text}}

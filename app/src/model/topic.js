@@ -11,7 +11,7 @@ var Topic = function(text) {
     this.text = text;
     this.votes = 0;
     this.status = 'STATUS_TO_DISCUSS';
-    this.discussingVotes = 0;
+    this.discussingVotes = {};
 };
 
 Topic.prototype = Object.create(Base.prototype);
@@ -65,17 +65,39 @@ Topic.prototype.removeVote = function() {
 };
 
 /**
- * Adds a discussing vote to this topic.
+ * Sets the given person voted positively on this topic.
  */
-Topic.prototype.addDiscussingVote = function() {
-    this.discussingVotes += 1;
+Topic.prototype.personPositiveDiscussingVote = function(person) {
+    this.discussingVotes[person.id] = true;
 };
 
 /**
- * Removes a vote from this topic.
+ * Sets the given person voted negatively on this topic.
  */
-Topic.prototype.removeDiscussingVote = function() {
-    this.discussingVotes -= 1;
+Topic.prototype.personNegativeDiscussingVote = function(person) {
+    this.discussingVotes[person.id] = false;
+};
+
+/**
+ * Determines if a topic should continue to be discussed.
+ * @param people
+ * @returns {boolean}
+ */
+Topic.prototype.shouldContinueDiscussing = function(people) {
+    var positiveVoted = _.values(_.pick(this.discussingVotes, function(n) {
+        return n === true;
+    })).length;
+
+    var negativeVoted = people - positiveVoted;
+    // Unanimous negative vote to stop talking about the topic.
+    if (this.status === Topic.TOPIC_STATUS_DISCUSSING) {
+        return people > negativeVoted;
+    }
+
+    // Half or more of the people want to continue talking.
+    console.log(positiveVoted);
+    console.log(people);
+    return positiveVoted >= (people / 2);
 };
 
 module.exports = Topic;

@@ -11,7 +11,7 @@
 .adminControlsContainerPositioner.sidebarPositioner
     .adminControlsContainer.sidebarContainer
         .sidebarHeader Admin Controls
-        .sidebarRow(ng-click="openVoting()", ng-show="meeting.status === MEETING_STATUS_TOPICS_OPEN") Open Voting
+        .sidebarRow(ng-click="openVoting()", ng-show="meeting.status === MEETING_STATUS_TOPICS_OPEN && meeting.topics.length > 0") Open Voting
         .sidebarRow(ng-click="closeVoting()", ng-show="meeting.status === MEETING_STATUS_VOTING_OPEN") Close Voting
         .sidebarRow(ng-click="timer.reset()") Reset Timer
         .sidebarRow(ng-click="settingTimer = true", ng-show="!settingTimer") Set Timer

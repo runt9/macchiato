@@ -325,7 +325,19 @@ var apiSocketController = function (socket) {
                 return;
             }
 
-            topic.addDiscussingVote();
+            var person = meeting.getPerson(client['clientGuid']);
+            if (person === null) {
+                return;
+            }
+
+            topic.personPositiveDiscussingVote(person);
+            if (topic.shouldContinueDiscussing(meeting.people.length - 1)) {
+                topic.updateStatus(topic.STATUS_DISCUSSING);
+                emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
+                emitToMeeting(meetingId, 'meetingStatusUpdated', meeting.STATUS_DISCUSSING);
+                return;
+            }
+
             emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
 
@@ -344,9 +356,14 @@ var apiSocketController = function (socket) {
                 return;
             }
 
-            topic.removeDiscussingVote();
+            var person = meeting.getPerson(client['clientGuid']);
+            if (person === null) {
+                return;
+            }
+
+            topic.personNegativeDiscussingVote(person);
             // Unanimous decision to stop discussing this topic
-            if ((topic.discussingVotes + (meeting.people.length - 1)) === 0) {
+            if (!topic.shouldContinueDiscussing(meeting.people.length - 1)) {
                 topic.updateStatus(topic.STATUS_DONE);
                 goToNextTopic(meeting);
                 emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);

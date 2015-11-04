@@ -1,7 +1,7 @@
 function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, lodash) {
     $scope.newTopicText = '';
     $scope.currentTopic = {};
-    $scope.discussingVoted = '';
+    $scope.discussingVoted = null;
     $scope.votesUsed = 0;
 
     // Run our init function once the parent scope has finished loading the meeting data
@@ -16,7 +16,7 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
 
     $scope.setCurrentTopic = function() {
         var topic = lodash.find($scope.meeting.topics, function (t) {
-            return t.status === $scope.TOPIC_STATUS_DISCUSSING || t.status === $scope.MEETING_STATUS_DISCUSSING_VOTING;
+            return t.status === $scope.TOPIC_STATUS_DISCUSSING || t.status === $scope.TOPIC_STATUS_DISCUSSING_VOTING;
         });
 
         if (topic === undefined) {
@@ -26,12 +26,12 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
 
         if (topic.id !== $scope.currentTopic.id) {
             $scope.currentTopic = topic;
-            $scope.discussingVoted = '';
+            $scope.discussingVoted = null;
             return;
         }
 
         if (topic.status === $scope.TOPIC_STATUS_DISCUSSING && $scope.currentTopic.status === $scope.TOPIC_STATUS_DISCUSSING_VOTING) {
-            $scope.discussingVoted = '';
+            $scope.discussingVoted = null;
             return;
         }
 
@@ -56,6 +56,11 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
                 });
 
                 $scope.votesUsed = votesUsed === undefined ? 0 : votesUsed;
+
+                var discussingVotes = $scope.currentTopic.discussingVotes;
+                if (!lodash.isEmpty($scope.currentTopic) && discussingVotes.hasOwnProperty(person.id)) {
+                    $scope.discussingVoted = discussingVotes[person.id];
+                }
 
                 $socket.emit('setClientPerson', person.id);
 
@@ -134,12 +139,12 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
 
     $scope.topicAddDiscussingVote = function(topicId) {
         $socket.emit('topicAddDiscussingVote', topicId);
-        $scope.discussingVoted = 'positive';
+        $scope.discussingVoted = true;
     };
 
     $scope.topicRemoveDiscussingVote = function(topicId) {
         $socket.emit('topicRemoveDiscussingVote', topicId);
-        $scope.discussingVoted = 'negative';
+        $scope.discussingVoted = false;
     };
 
     $socket.on('joinSuccess', function(personId) {
