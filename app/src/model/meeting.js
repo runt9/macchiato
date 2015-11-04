@@ -55,6 +55,19 @@ Meeting.prototype.updateStatus = function(status) {
 };
 
 /**
+ * Gets a person by their person id.
+ * @param personId
+ * @returns {Person}
+ */
+Meeting.prototype.getPerson = function(personId) {
+    var person = _.find(this.people, function(person) {
+        return person.id === personId;
+    });
+
+    return person === undefined ? null : person;
+};
+
+/**
  * Creates a new person with the given name and joins them to our meeting.
  * @param personName
  * @returns {Person}

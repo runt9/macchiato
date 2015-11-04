@@ -1,5 +1,4 @@
 function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, lodash) {
-    $scope.me = {};
     $scope.newTopicText = '';
     $scope.currentTopic = {};
     $scope.discussingVoted = '';
@@ -52,7 +51,14 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
             });
 
             if (person) {
-                $scope.me = person;
+                var votesUsed = lodash.reduce(person.votes, function(result, n) {
+                    return result + n;
+                });
+
+                $scope.votesUsed = votesUsed === undefined ? 0 : votesUsed;
+
+                $socket.emit('setClientPerson', person.id);
+
                 return;
             }
         }
@@ -75,6 +81,12 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
                 };
             }
         });
+    };
+
+    $scope.canRemoveTopicVote = function(topicId) {
+        var self = $scope.getSelf();
+        // Cannot remove votes from a topic we have not voted on.
+        return self.votes.hasOwnProperty(topicId) && self.votes[topicId] > 0;
     };
 
     $scope.addTopic = function() {
@@ -112,6 +124,10 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
             return;
         }
 
+        if (!$scope.canRemoveTopicVote(topicId)) {
+            return;
+        }
+
         $scope.votesUsed -= 1;
         $socket.emit('topicRemoveVote', topicId);
     };
@@ -129,6 +145,7 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
     $socket.on('joinSuccess', function(personId) {
         var expires = new Date(new Date().getTime() + (1000 * 60 * 60 * 2)); // 2 Hours
         $cookies.put('macchiato_' + $scope.meeting.id, personId, {expires: expires});
+        $socket.emit('setClientPerson', personId);
     });
 
     $socket.on('personPromoted', function(personId) {

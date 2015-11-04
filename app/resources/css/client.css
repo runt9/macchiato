@@ -1,6 +1,5 @@
 .addTopics {
     margin: 0 auto;
-    width: 40%;
 }
 
 .topicInput {
@@ -16,4 +15,10 @@
 
 .newTopicReset {
     margin-right: 20px;
+}
+
+.clientMeeting .topic {
+    max-width: 300px;
+    min-width: 200px;
+    margin: 6px auto;
 }

@@ -1,4 +1,4 @@
-function AdminMeetingController($scope, $socket, $interval, lodash, $cookies) {
+function AdminMeetingController($scope, $socket, $interval, lodash) {
     $scope.currentTopic = null;
     $scope.settingTimer = false;
     $scope.newTimerTime = '';
@@ -17,6 +17,7 @@ function AdminMeetingController($scope, $socket, $interval, lodash, $cookies) {
         $scope.timer.timePerTopic = $scope.meeting.settings['timePerTopic'] * 60;
         $scope.timer.timePerTopicAfterVote = $scope.meeting.settings['timePerTopicAfterVote'] * 60;
         $scope.timer.time = $scope.timer.timePerTopic;
+        $socket.emit('setClientPerson', $scope.meeting.admin);
     };
 
     $scope.personNameEllipses = function(name) {

@@ -64,6 +64,11 @@ var apiSocketController = function (socket) {
             clients.push(client);
         });
 
+        client.on('setClientPerson', function (personGuid) {
+            logger.debug('Setting client %s to person %s', client['clientGuid'], personGuid);
+            client['clientGuid'] = personGuid;
+        });
+
         // Event to update a meeting's status
         client.on('updateMeetingStatus', function (status) {
             var meetingId = client.meetingId;
@@ -268,7 +273,14 @@ var apiSocketController = function (socket) {
                 return;
             }
 
+            var person = meeting.getPerson(client['clientGuid']);
+            if (person === null) {
+                return;
+            }
+
             topic.addVote();
+            person.addVote(topic);
+            emitToMeeting(meetingId, 'peopleUpdated', meeting.people);
             emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
 
@@ -287,7 +299,14 @@ var apiSocketController = function (socket) {
                 return;
             }
 
+            var person = meeting.getPerson(client['clientGuid']);
+            if (person === null) {
+                return;
+            }
+
             topic.removeVote();
+            person.removeVote(topic);
+            emitToMeeting(meetingId, 'peopleUpdated', meeting.people);
             emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
         });
 

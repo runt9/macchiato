@@ -82,3 +82,14 @@ nav a {
     font-weight: bold;
     margin-top: 10px;
 }
+
+@media (max-width: 768px) {
+    .navbar:before, .navbar:after, .navbar-header:before, .navbar-header:after,
+    .navbar-nav:before, .navbar-nav:after {
+        display: inline;
+    }
+
+    .navbar-right {
+        float: right;
+    }
+}
