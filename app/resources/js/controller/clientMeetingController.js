@@ -31,6 +31,7 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
         }
 
         if (topic.status === $scope.TOPIC_STATUS_DISCUSSING && $scope.currentTopic.status === $scope.TOPIC_STATUS_DISCUSSING_VOTING) {
+            $scope.currentTopic.status = $scope.TOPIC_STATUS_DISCUSSING;
             $scope.discussingVoted = null;
             return;
         }
@@ -70,19 +71,21 @@ function ClientMeetingController($scope, $modal, $socket, $cookies, $interval, l
 
         $modal.open({
             templateUrl: 'joinMeetingModal.html',
-            backdrop: true,
+            backdrop: 'static',
+            keyboard: false,
             size: 'sm',
             controller: function($scope, $modalInstance) {
                 $scope.error = null;
                 $scope.name = '';
 
                 $scope.submit = function() {
+                    if ($scope.name.length === 0) {
+                        $scope.error = 'Please enter a name';
+                        return;
+                    }
+
                     $socket.emit('addPerson', {personName: $scope.name});
                     $modalInstance.dismiss(true);
-                };
-
-                $scope.cancel = function () {
-                    $modalInstance.dismiss(false);
                 };
             }
         });

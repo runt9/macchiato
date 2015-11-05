@@ -1,5 +1,14 @@
+.clientMeeting {
+    height: 100%;
+    padding-bottom: 125px;
+}
+
 .addTopics {
     margin: 0 auto;
+}
+
+.voteTopics {
+    height: 100%;
 }
 
 .topicInput {

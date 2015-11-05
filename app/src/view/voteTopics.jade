@@ -1,7 +1,8 @@
 p Below are the topics ready to be discussed. You have {{meeting.settings.votesPerPerson - votesUsed}} votes remaining.
-.topicsToDiscuss
-    .topic(ng-repeat="topic in meeting.topics", data-topic-id="{{topic.id}}")
-        span.glyphicon.glyphicon-plus.vote.addVote(ng-click="topicAddVote(topic.id)", ng-hide="meeting.settings.votesPerPerson - votesUsed === 0")
-        span.glyphicon.glyphicon-minus.vote.removeVote(ng-click="topicRemoveVote(topic.id)", ng-hide="!canRemoveTopicVote(topic.id)")
-        p.topicText {{topic.text}}
-        p.topicVotes {{dotVotes(topic)}}
+.topicsToDiscussContainer
+    .topicsToDiscuss
+        .topic(ng-repeat="topic in meeting.topics", data-topic-id="{{topic.id}}")
+            span.glyphicon.glyphicon-plus.vote.addVote(ng-click="topicAddVote(topic.id)", ng-hide="meeting.settings.votesPerPerson - votesUsed === 0")
+            span.glyphicon.glyphicon-minus.vote.removeVote(ng-click="topicRemoveVote(topic.id)", ng-hide="!canRemoveTopicVote(topic.id)")
+            p.topicText {{topic.text}}
+            p.topicVotes {{dotVotes(topic)}}

@@ -42,6 +42,11 @@ function MeetingController($scope, $http, $cookies, $socket, lodash) {
         });
     });
 
+    $socket.on('kicked', function() {
+        $cookies.remove('macchiato_' + $scope.meeting.id);
+        window.location = '/';
+    });
+
     $scope.promotePerson = function(person) {
         $socket.emit('promotePerson', person.id);
     };

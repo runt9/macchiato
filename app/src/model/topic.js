@@ -44,6 +44,9 @@ Topic.prototype.isValidStatus = function(status) {
  */
 Topic.prototype.updateStatus = function(status) {
     this.status = status;
+    if (status === this.STATUS_DISCUSSING) {
+        this.discussingVotes = {};
+    }
 };
 
 /**
@@ -88,16 +91,25 @@ Topic.prototype.shouldContinueDiscussing = function(people) {
         return n === true;
     })).length;
 
-    var negativeVoted = people - positiveVoted;
+    return positiveVoted >= (people / 2);
+};
+
+/**
+ * Determines if a topic should stop being discussed.
+ * @param people
+ * @returns {boolean}
+ */
+Topic.prototype.shouldStopDiscussing = function(people) {
+    var negativeVoted = _.values(_.pick(this.discussingVotes, function(n) {
+        return n === false;
+    })).length;
+
     // Unanimous negative vote to stop talking about the topic.
-    if (this.status === Topic.TOPIC_STATUS_DISCUSSING) {
-        return people > negativeVoted;
+    if (this.status === this.STATUS_DISCUSSING) {
+        return people === negativeVoted;
     }
 
-    // Half or more of the people want to continue talking.
-    console.log(positiveVoted);
-    console.log(people);
-    return positiveVoted >= (people / 2);
+    return negativeVoted > (people / 2);
 };
 
 module.exports = Topic;

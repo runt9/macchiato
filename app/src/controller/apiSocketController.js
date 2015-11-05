@@ -168,8 +168,21 @@ var apiSocketController = function (socket) {
                 return;
             }
 
+            var person = meeting.getPerson(personId);
+            if (person === null) {
+                return;
+            }
+
             var success = meeting.personRemove(personId);
             if (success) {
+                var personSocket = _.find(clients, function(c) {
+                    return c.clientGuid === personId;
+                });
+
+                if (personSocket !== undefined) {
+                    personSocket.emit('kicked');
+                }
+
                 emitToMeeting(meetingId, 'peopleUpdated', meeting.people);
                 return;
             }
@@ -362,8 +375,7 @@ var apiSocketController = function (socket) {
             }
 
             topic.personNegativeDiscussingVote(person);
-            // Unanimous decision to stop discussing this topic
-            if (!topic.shouldContinueDiscussing(meeting.people.length - 1)) {
+            if (topic.shouldStopDiscussing(meeting.people.length - 1)) {
                 topic.updateStatus(topic.STATUS_DONE);
                 goToNextTopic(meeting);
                 emitToMeeting(meetingId, 'topicsUpdated', meeting.topics);
